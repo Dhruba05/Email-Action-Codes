@@ -1,0 +1,25 @@
+(function execute(inputs, outputs) {
+var gr=new GlideRecord('interaction');
+var temp=inputs.template;
+gr.initialize();
+gr.applyTemplate(temp);
+gr.setValue('short_description',inputs.email_subject);
+gr.setValue('opened_for',inputs.opened_for);
+gr.setValue('u_business_phone',inputs.business_phone);
+gr.setValue('')
+outputs.record=gr.insert();
+
+//updating worknotes field
+var worknotesGr=new GlideRecord('sys_journal_field');
+worknotesGr.initialize();
+worknotesGr.setValue('name','interaction');
+worknotesGr.setValue('element_id',outputs.record);
+worknotesGr.setValue('value',inputs.email_body);
+worknotesGr.setValue('element','work_notes');
+worknotesGr.insert();
+
+
+var sa=new GlideSysAttachment();
+sa.copy('sys_email',inputs.email_source,'interaction',outputs.record);
+
+})(inputs, outputs);
