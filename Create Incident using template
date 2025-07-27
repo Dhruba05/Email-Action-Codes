@@ -1,0 +1,15 @@
+(function execute(inputs, outputs) {
+var gr=new GlideRecord('incident');
+var temp=inputs.template;
+gr.initialize();
+gr.applyTemplate(temp);
+gr.setValue('short_description',inputs.email_subject);
+gr.setValue('caller_id',inputs.caller_name);
+gr.setValue('description' , inputs.description);
+outputs.record=gr.insert();
+
+//copying attachment
+var sa=new GlideSysAttachment();
+sa.copy('sys_email',inputs.email_source,'incident',outputs.record);
+
+})(inputs, outputs);
